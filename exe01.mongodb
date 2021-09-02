@@ -1,0 +1,168 @@
+
+// mongodb server commands  -> sudo  systemctl [start/status/stop/reload] mongod
+
+//Create and inserts
+use('db_senac');
+db.createCollection('pokemons');
+
+var pokemon = 
+{
+name: "Bulbasaur",
+description: "Bulbasaur é um Pokemon pequeno com apenas 71,2 cm mas isso não faz dele um Pokemon fraco na verdade Bulbasaur é um verdadeiro lutador",    
+img: "http://img.pokemondb.net/artwork/bulbasaur.jpg",
+type: [
+      "Grass",
+      "Poison"
+    ],
+hp: 45,
+attack: "49",
+defense: "49",  
+speed: 45
+};
+db.pokemons.insertOne(pokemon);
+
+
+var pokemon = {
+    name: 'Blastoise',
+    description: 'Ele pode dispara balas de águas com precisão.',
+    attack: 85,
+    defense: 105
+};
+db.pokemons.insertOne(pokemon);
+
+
+var pokemon = {
+    name: 'Pidgey',
+    description: 'Esse sabe onde fica o Alegrete',
+    attack: 35,
+    defense: 35
+};
+db.pokemons.insertOne(pokemon);
+
+
+var pokemon = {
+    name: 'Sandslash',
+    description: 'Um rato com espinhos pontiagudos',
+    attack: 45 ,
+    defense: 55
+};
+db.pokemons.insertOne(pokemon);
+
+
+var pokemon = {
+    name: 'Jigglypuff',
+    description: 'Faz o inimigo dormir como um anjo.',
+    attack: 45,
+    defense: 25
+};
+db.pokemons.insertOne(pokemon);
+
+var pokemon = {
+    name: 'Ninetales',
+    description: 'Ganha o controle da mente do inimigo.',
+    attack: 81,
+    defense: 100
+};
+db.pokemons.insertOne(pokemon);
+
+// ---------------------------------------------------------------
+/*
+01 - Usar a collections 'pokemons' e encontre (find) todos os nomes Pokemon da coleção;
+*/
+use('db_senac');
+db.pokemons.find({},{name:1});
+/*
+02 - Encontre o pokemon de nome ( name ) “Bulbasaur”
+*/
+use('db_senac');
+db.pokemons.find({name:'Bulbasaur'},{name:1});
+/*
+03 - Encontre o pokemon com característica speed  maior ou igual "60"
+*/
+use('db_senac');
+db.pokemons.find({speed:{$gte:60}});
+/*
+04 - Encontre o pokemon com característica attack maior que “45” E  defense menor ou igual a “25”
+*/
+use('db_senac');
+db.pokemons.find({attack: {$gte: 60}, defense: {$lte: 100}});
+/*
+05 - Encontre os pokemons com característica de attack maior ou igual a “45”
+*/
+use('db_senac');
+db.pokemons.find({attack: {$gte: 45}});
+/*
+06 - Encontre o pokemon com a description: “Um rato com espinhos pontiagudos”
+*/
+use('db_senac');
+db.pokemons.find({description: "Um rato com espinhos pontiagudos"});
+/*
+07 - Encontre o pokemon com attack : “35” OU attack : “45” OU defense : “100”
+*/
+use('db_senac');
+db.pokemons.find({$or: [{attack: 35}, {attack: 45},{attack: 100}]});
+/*
+08 - Utilize o comando em MongoDB para contar quantos pokemon tem na collection
+*/
+use('db_senac');
+db.pokemons.find().count();
+/*
+09 - Alterar os dados do pokemon “Jigglypuff” e coloque a defense: “45”
+*/
+use('db_senac');
+db.pokemons.updateOne({name: "Jigglypuff"}, {$set: {defense: 45}});
+/*
+10 - Inserir os dados para os pokemons
+    a.  name: “Caterpie”  ,Height: “1", Weight : “6.4 lbs”,  attack: “25” , defense : “20”
+    
+    b. name: "Rattata", defense : 35, height: "3",hp : 30, speed: 72
+*/
+use('db_senac');
+db.pokemons.insertMany(
+    [
+        {
+            name: "Caterpie",
+            Height: 1,
+            Weight: "6.4 lbs",
+            attack: 25,
+            defense: 30
+        },
+        {
+            name: "Rattata",
+            defense: 35,
+            Height: 3,
+            hp: 30,
+            speed: 72
+        }
+    ]
+);
+/*
+11 - Inserir os dados para o pokemon “Pikachu” procure na internet as propriedades dele.
+*/
+use('db_senac');
+db.pokemons.insertOne(
+    {
+        name: "Pikachu",
+        Height: "0.4 m",
+        Weight: "6.0 kg",
+        category: "Mouse",
+        Abilities: "Static",
+        Type: "Electric",
+        Weaknesses: "Ground"
+    }
+);
+/*
+12 - Excluir o pokemon “Caterpie” 
+*/
+use('db_senac');
+db.pokemons.deleteOne({name: "Caterpie"});
+/*
+13 - Alterar o pokemon : "Rattata" e coloque a defense: 25 e speed: 60.
+*/
+use('db_senac');
+db.pokemons.updateOne({name: "Rattata"}, {$set:{defense: 25, speed: 60}});
+/*
+14 - Listar todos os pokemons;
+*/
+use('db_senac');
+db.pokemons.find();
