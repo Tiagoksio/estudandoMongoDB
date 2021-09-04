@@ -1,0 +1,79 @@
+//Base de dados restaurante.json
+/*
+01 - Encontre os restaurantes do bairro Bronx
+*/
+
+use('db_senac');
+var rest = db.restaurante.find({bairro: "Bronx"});
+while (rest.hasNext()){
+    print(EJSON.stringify(rest.next()));
+};
+/*
+02 - Encontre os 5 primeiros restaurantes do bairro Bronx
+*/
+use('db_senac');
+db.restaurante.find({bairro: "Bronx"}).limit(5).sort("_id");
+/*
+03 - Escreva uma consulta do MongoDB para exibir os próximos 5 restaurantes depois de pular os 5 primeiros que estão no bairro Bronx.
+*/
+use('db_senac');
+db.restaurante.find({bairro: "Bronx"}).skip(5).limit(10).sort("_id");
+/*
+04 - Escreva uma consulta do MongoDB para exibir os campos restaurant_id, nome, bairro e culinária de todos os documentos no restaurante de coleção.
+*/
+
+use('db_senac');
+var rest = db.restaurante.find({},{nome:1 , bairro: 1, cozinha: 1});
+while (rest.hasNext()){
+    print(EJSON.stringify(rest.next()));
+};
+/*
+05 - Escreva uma consulta do MongoDB para exibir os campos restaurant_id, nome, bairro e culinária, mas exclua o campo _id para todos os documentos no restaurante de coleção.
+*/
+
+use('db_senac');
+var rest = db.restaurante.find({},{_id: 0, nome:1 , bairro: 1, cozinha: 1});
+while (rest.hasNext()){
+    print(EJSON.stringify(rest.next()));
+};
+
+/*
+06 - Faça uma consulta no MongoDB para encontrar os restaurantes que atingiram uma pontuação superior a 90
+*/
+
+use('db_senac');
+db.restaurante.find({"notas.pontos": {$gt: 90}});
+
+/*
+07 - Escreva uma consulta do MongoDB para encontrar os restaurantes que atingiram uma pontuação maior que 80, mas menor que 100.
+*/
+use('db_senac');
+db.restaurante.find({$and : [{"notas.pontos": {$gt: 80}},{"notas.pontos": {$lt: 100}}]
+});
+
+/*
+08 - Escreva uma consulta do MongoDB para encontrar os restaurantes que não preparam nenhuma cozinha 'americana' e a nota é maior que 70 e a latitude menor que -65.754168.
+*/
+
+use('db_senac');
+db.restaurante.find({
+    "notas.pontos": {$gt: 70},
+    "endereco.coord.0" : {$lt: -65.754168},
+    "cozinha" : {
+        $ne: "American "
+    }
+});
+
+/*
+09 - Escreva uma consulta do MongoDB para encontrar os restaurantes que não preparam nenhuma cozinha 'americana' e atingiram um ponto de classificação 'A' que não pertence ao bairro Brooklyn. O documento deve ser exibido de acordo com a cozinha em ordem decrescente
+*/
+use('db_senac');
+db.restaurante.find({
+    "bairro": {
+        $ne: "Brooklyn"
+    },
+    "cozinha" : {
+        $ne: "American "
+    },
+    "notas.nota" : "A"
+});
