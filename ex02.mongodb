@@ -1,0 +1,82 @@
+// -----------------------------------------------------
+// Increment
+use('db_senac');
+db.produto.updateMany({}, {$inc: {quantidade: 3}});
+
+use('db_senac');
+db.produto.updateMany({nome: "mouse"},
+{$inc: {quantidade: 7}});
+
+// ----------------------------------------------------
+
+use('db_senac');
+db.lojaTI.insertMany([
+{ "_id" : 1, "item" : "Mouse", "preco" : NumberDecimal("45"), "quantidade" : NumberInt("2"), "data" : ISODate("2018-03-01T08:00:00Z") },
+{ "_id" : 2, "item" : "HD", "preco" : NumberDecimal("200"), "quantidade" : NumberInt("1"), "data" : ISODate("2018-03-01T09:00:00Z") },
+{ "_id" : 3, "item" : "Pen Drive", "preco" : NumberDecimal("29"), "quantidade" : NumberInt( "10"), "data" : ISODate("2018-03-15T09:00:00Z") },
+{ "_id" : 4, "item" : "SSD", "preco" : NumberDecimal("255"), "quantidade" : NumberInt("20") , "data" : ISODate("2018-04-04T11:21:39.736Z") },
+{ "_id" : 5, "item" : "Impressora", "preco" : NumberDecimal("450"), "quantidade" : NumberInt("10") , "data" : ISODate("2018-04-04T21:23:13.331Z") },
+{ "_id" : 6, "item" : "Teclado", "preco" : NumberDecimal("99.5"), "quantidade": NumberInt("5" ) , "data" : ISODate("2018-06-04T05:08:13Z") },
+{ "_id" : 7, "item" : "Placa de Vídeo", "preco" : NumberDecimal("999.5"), "quantidade": NumberInt("10") , "data" : ISODate("2018-09-10T08:43:00Z") },
+{ "_id" : 8, "item" : "Memória RAM", "preco" : NumberDecimal("300"), "quantidade" : NumberInt("5" ) , "data" : ISODate("2018-02-06T20:20:13Z") },
+]);
+
+use('db_senac');
+db.lojaTI.insertOne(
+    { 
+        "_id" : 9, 
+        "item" : "Memória RAM", 
+        "preco" : NumberDecimal("300"), 
+        "quantidade" : NumberInt("5" ) , 
+        "data" : ISODate("2018-02-06T20:20:13Z") 
+    }
+);
+
+use('db_senac');
+db.lojaTI.aggregate(
+    [{
+        $group: {
+            _id: null,
+            count: {$sum: 1}
+        }
+    }]
+);
+/* Equivalente ao SQL:
+    SELECT 
+        item,
+        sum(preco * quantidade) AS Total
+        FROM lojaTI
+        GROUP BY item
+        HAVING total >= 100;
+*/ 
+use('db_senac');
+db.lojaTI.aggregate(
+  [
+    // Primeira parte
+    {
+      $group :
+        {
+          _id : "$item",
+          total: { $sum: { $multiply: [ "$preco", "$quantidade" ] } }
+        }
+     },
+     // segunda parte 
+    {
+       $match: { "total": { $gte: 100 } }
+     }
+   ]
+ );
+
+use('db_senac');
+var cidade = db.municipios.find({}, {nome: 1, _id:0 }).sort({nome: 1});
+cidade.forEach((cidade) => {
+    print(cidade.nome);
+});
+
+use('db_senac');
+var cidade = db.municipios.find({}, {nome: 1, _id:0 }).sort({nome: 1});
+while (cidade.hasNext()){ 
+    print(EJSON.stringify(cidade.next())); 
+};
+
+// ------------------------------------------------------------------------------------------------
