@@ -1,0 +1,115 @@
+//Inserts
+db.produtos.insertMany(
+    [
+        {
+            marca: "Motorola",
+            modelo: "Moto G7",
+            item: "Novo celular da Motorola lançado em 2018",
+            sistema: "Android",
+            preco: NumberDecimal("1800"),
+            quantidade: 10
+        },
+        {
+            marca: "Apple",
+            modelo: "iPhone 12",
+            item: "Celular da apple",
+            sistema: "iOS",
+            preco: NumberDecimal("8000"),
+            quantidade: 10
+        },
+        {
+            marca: "Samsung",
+            modelo: "Galaxy Note 10",
+            item: "Celular grande da Samsung",
+            sistema: "Android",
+            preco: NumberDecimal("5300"),
+            quantidade: 10
+        },
+        {
+            marca: "Xiaomi",
+            modelo: "Redmi Go",
+            item: "Celular de entrada da Xiaomi",
+            sistema: "Android",
+            preco: NumberDecimal("900"),
+            quantidade: 10
+        }
+    ]
+);
+
+db.clientes.insertMany(
+    [
+        {
+            nome: "Renato",
+            endereco: "Q 10",
+            email: "renato@example.com",
+            senha: "renato123456"
+        },
+        {
+            nome: "Bianca",
+            endereco: "Q 12",
+            email: "bianca@example.com",
+            senha: "bianca123456"
+        },
+        {
+            nome: "Leonardo",
+            endereco: "Q 15",
+            email: "leo@example.com",
+            senha: "leo123456"
+        }
+    ]
+);
+
+// Localizar e atualizar
+var produto1 = db.produtos.findOneAndUpdate(
+    {
+        modelo: "iPhone 12",
+        quantidade: {
+            $gt: 0
+        }
+    },
+    {
+        $inc: {
+            quantidade: -1
+        }
+    },
+    {
+        projection: {
+            marca: 1,
+            modelo: 1,
+            preco: 1
+        }
+    }
+);
+
+var produto2 = db.produtos.findOneAndUpdate(
+    {
+        modelo: "Moto G7",
+        quantidade: {
+            $gt: 0
+        }
+    },
+    {
+        $inc: {
+        quantidade: -1
+        }
+    },
+    {
+        projection: {
+        marca: 1,
+        modelo: 1,
+        preco: 1
+        }
+    }
+);
+
+
+db.clientes.updateOne(
+    { 
+        _id: ObjectId("61327401474dc8ffae6a486d")
+    },
+    { 
+        $set : {
+        pedido : produto2
+        } 
+    }
+);
